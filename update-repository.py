@@ -4,10 +4,26 @@ from time import sleep
 from os import listdir
 from os import system as cmd
 import os
-REPOSITORY = "test"
-ROOT = r"C:\Users\Stepan\Desktop\test"
+from sys import exit
 from sys import path;MY_PATH = path[0]
 
+ROOT = None
+REPOSITORY = None
+with open("config.txt", "r") as f:
+    for line in f:
+        if "ROOT" in line:
+            ROOT = line.split("==")[1]
+        elif "REPOSITORY" in line:
+            REPOSITORY = line.split("==")[1]
+
+if not ROOT:
+    print("Not found ROOT, this is path where is you repository")
+    print("Please, set ROOT in config file.")
+    exit()
+elif not REPOSITORY:
+    print("Not found REPOSITORY, this is name of your repository")
+    print("Please, set REPOSITORY into config file.")
+    exit()
 
 
 
@@ -36,13 +52,11 @@ while True:
     if last_update:
         if last_update != repository["pushed_at"]:
             os.chdir(ROOT)
-            print(os.getcwd())
             print("have changes!")
             print("update repository...")
             cmd(f"git pull")
             print("successfully update")
             os.chdir(MY_PATH)
-            print(os.getcwd())
 
         save({"last": repository["pushed_at"]})
     else:
