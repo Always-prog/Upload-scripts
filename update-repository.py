@@ -1,25 +1,54 @@
 import json
+from github import GitHub
+from time import sleep
+from os import listdir
+from os import system as cmd
+import os
+REPOSITORY = "test"
+ROOT = r"C:\Users\Stepan\Desktop\test"
+from sys import path;MY_PATH = path[0]
 
 
-class GitHub():
-    def __init__(self, token):
-        import requests
-        self.requests = requests
-        self.__TOKEN__ = token
-        self.__AUTHORIZE__ = {
-            "data":{
-                "token":self.__TOKEN__
-            },
-            "request":{
-                "headers":{
-                    "Authorization": "token " + token
-                }
-            }
 
-        }
-    def get_repositories(self, **data):
-        return self.requests.get("https://api.github.com/user/repos", data,headers=self.__AUTHORIZE__["request"]["headers"])
+
+
 
 token = json.load(open("keys.json","r"))["token"]
-git = GitHub(token)
-print(git.get_repositories().json())
+git = GitHub(token, user_name="Always-prog")
+
+if not "history.json" in listdir():
+    print("No such history file")
+    with open("history.json","w") as f:
+        f.write(json.dumps({"last":None}))
+    print("Create history file")
+
+def save(data: dict,path="history.json"):
+    with open(path,"w") as f:
+        f.write(json.dumps(data))
+
+while True:
+    repository = git.get_repo(REPOSITORY)
+    if not repository:
+        print("Repository has no found!")
+        continue
+    history = json.load(open("./history.json","r"))
+    last_update = history.get("last",None)
+    if last_update:
+        if last_update != repository["pushed_at"]:
+            os.chdir(ROOT)
+            print(os.getcwd())
+            print("have changes!")
+            print("update repository...")
+            cmd(f"git pull")
+            print("successfully update")
+            os.chdir(MY_PATH)
+            print(os.getcwd())
+
+        save({"last": repository["pushed_at"]})
+    else:
+        last_update = repository["pushed_at"]
+        save({"last":last_update})
+
+        print("Not have last data")
+
+    sleep(2)
