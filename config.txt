@@ -1,2 +1,3 @@
 REPOSITORY==test
 ROOT==C:\Users\Stepan\Desktop\test
+START==py asd.py;
