@@ -100,4 +100,4 @@ while True:
 
         print("Not have last data")
 
-    sleep(2)
+    sleep(10)
