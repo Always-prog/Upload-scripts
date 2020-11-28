@@ -1,3 +1,5 @@
-REPOSITORY==test
-ROOT==C:\Users\Stepan\Desktop\test
-START==py asd.py;
+REPOSITORY==name of your repository
+ROOT==root where is your github repository in local
+TOKEN==your token form github
+USERNAME==your username
+START==your command to start program, for example "python main.py"

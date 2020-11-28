@@ -12,15 +12,21 @@ MY_PATH = path[0]
 
 ROOT = None
 REPOSITORY = None
+USERNAME = None
+TOKEN = None
 START = []
 with open("config.txt", "r") as f:
     for line in f:
         if "ROOT" in line:
-            ROOT = line.split("==")[1][:-1]
+            ROOT = line.split("==")[1].replace("\n","")
         elif "REPOSITORY" in line:
-            REPOSITORY = line.split("==")[1][:-1]
-        if "START" in line:
-            START = str(line.split("==")[1][:-1]).split(";")
+            REPOSITORY = line.split("==")[1].replace("\n","")
+        elif "START" in line:
+            START = line.split("==")[1].replace("\n","")
+        elif "USERNAME" in line:
+            USERNAME = line.split("==")[1].replace("\n","")
+        elif "TOKEN" in line:
+            TOKEN = line.split("==")[1].replace("\n", "")
 if not START:
     print("Not found START, this is path where is you repository")
     print("Please, set ROOT in config file.")
@@ -29,13 +35,20 @@ if not ROOT:
     print("Not found ROOT, this is path where is you repository")
     print("Please, set ROOT in config file.")
     exit()
-elif not REPOSITORY:
+if not REPOSITORY:
     print("Not found REPOSITORY, this is name of your repository")
     print("Please, set REPOSITORY into config file.")
     exit()
+if not USERNAME:
+    print("Not found USERNAME, this is name of account where is your repository")
+    print("Please, set USERNAME into config file.")
+    exit()
+if not TOKEN:
+    print("Not found TOKEN, this is token of account")
+    print("Please, set TOKEN into config file.")
+    exit()
 
-token = json.load(open("keys.json", "r"))["token"]
-git = GitHub(token, user_name="Always-prog")
+git = GitHub(TOKEN, user_name=USERNAME)
 process = None
 
 if not "history.json" in listdir():
@@ -68,8 +81,7 @@ def start_program():
     global ROOT
     global process
     os.chdir(ROOT)
-    for command in START:
-        process = subprocess.Popen(command.split(" "))
+    process = subprocess.Popen(START.split(" "))
 
 while True:
     repository = git.get_repo(REPOSITORY)
