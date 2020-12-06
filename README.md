@@ -14,6 +14,7 @@ TOKEN==bc4ef98nfn3498sasip34os6fd2add8b2459e
 USERNAME==Always-prog
 START==python main.py
 ```
+*You can create token in this page: https://github.com/settings/tokens*
 4. Run this program by command `python auto_update.py`
 
 
