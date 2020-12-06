@@ -70,6 +70,7 @@ def found_new_changes():
     os.chdir(ROOT)
     print("have changes!")
     print("update repository...")
+    cmd('git commit -m "updated"')
     cmd(f"git pull")
     stop_program()
     start_program()

@@ -35,5 +35,6 @@ class GitHub():
     def get_repo(self, name: str):
         repos = self.get_repositories(json={"sort":name})
         for r in repos.json():
-            if r["name"] == name:
-                return r
+            if "name" in r:
+                if r["name"] == name:
+                    return r
